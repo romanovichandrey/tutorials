@@ -31,6 +31,6 @@ public class App implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/home").setViewName("home.html");
-        registry.addViewController("/login").setViewName("login.html");
+        registry.addViewController("/login").setViewName("tmp/index.html");
     }
 }
