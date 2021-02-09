@@ -1,0 +1,23 @@
+server:
+  port: 8888
+  kerberos-credential:
+    principal: HTTP/smartis.bytechs.by@BYTECHS.BY
+    keytab-location: classpath:bytechs\SmartisUser.keytab
+  ldap-connection-settings:
+    principal: HTTP/smartis.bytechs.by@BYTECHS.BY
+    keytab-location: classpath:bytechs\SmartisUser.keytab
+    url:
+      - "ldap://dc2.bytechs.by:3268"
+      - "ldap://dc3.bytechs.by:3268"
+      - "ldap://dc4.bytechs.by:3268"
+    base-partition-suffix: "DC=BYTECHS,DC=BY"
+    base-partition: "BYTECHS.BY"
+  mail:
+    host: mail.bytechs.by
+    port: 465
+    login: smartis-report@bytechs.by
+    password: 9yFGgLhsEuxf30LFPMrr
+    ssl: true
+spring:
+  profiles:
+    active: @spring.active.profile@

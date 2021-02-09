@@ -1,0 +1,60 @@
+Configuration:
+  status: warn
+
+  properties:
+    Property:
+      name: file-name
+      value: /tmp/export-data/logs
+
+  appenders:
+    Console:
+      name: ConsoleAppender
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red, ERROR=red, WARN=yellow,
+         INFO=green, DEBUG=green, TRACE=green} %style{${sys:PID}}{magenta} --- [%t] %style{%c{10}}{cyan} : %m%n%ex"
+        DisableAnsi: "false"
+
+    RollingRandomAccessFile:
+    -
+      name: WebLevelAppender
+      fileName: ${file-name}/webLevelLog.log
+      filePattern: ${file-name}/archives/archive%d{yyyy-MM-dd}/webLevelLog.log.gz
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p ${sys:PID}] --- [%t] %c{10} : %m%n%ex"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 7
+        SizeBasedTriggeringPolicy:
+          size: 100 MB
+      DefaultRolloverStrategy:
+        max: 20
+
+  Loggers:
+    logger:
+      -
+        name: WebLogger
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: WebLevelAppender
+      -
+        name: org.springframework
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: WebLevelAppender
+          - ref: ConsoleAppender
+      -
+        name: org.apache.tomcat.embed
+        level: debug
+        additivity: fasle
+        AppenderRef:
+          - ref: ConsoleAppender
+          - ref: WebLevelAppender
+
+    Root:
+      level: debug
+      AppenderRef:
+        - ref: ConsoleAppender
+        - ref: WebLevelAppender
