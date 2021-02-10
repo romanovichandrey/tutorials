@@ -4,7 +4,7 @@ Configuration:
   properties:
     Property:
       name: file-name
-      value: /tmp/export-data/logs
+      value: /tmp/tutorials/logs
 
   appenders:
     Console:

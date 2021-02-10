@@ -41,10 +41,6 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         // Use the DefaultSavedRequest URL
         String targetUrl = savedRequest.getRedirectUrl();
 
-        if (targetUrl.endsWith(".js") || targetUrl.endsWith(".css")) {
-            targetUrl = getDefaultTargetUrl();
-        }
-
         logger.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

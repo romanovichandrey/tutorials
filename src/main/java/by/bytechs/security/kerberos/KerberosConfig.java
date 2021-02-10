@@ -43,7 +43,7 @@ public class KerberosConfig {
 
     @Bean
     public SpnegoEntryPoint spnegoEntryPoint() {
-        return new SpnegoEntryPoint("/tmp/index");
+        return new SpnegoEntryPoint("/login");
     }
 
     @Bean

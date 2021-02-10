@@ -1,5 +1,6 @@
 package by.bytechs.security;
 
+import by.bytechs.security.basic.BasicAuthenticationProvider;
 import by.bytechs.security.handler.AuthenticationSuccessHandler;
 import by.bytechs.security.kerberos.KerberosConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +50,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .exceptionHandling()
-                .authenticationEntryPoint(spnegoEntryPoint)
+                .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(spnegoEntryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/ldap-info").hasRole("AllUSERS")
-                .anyRequest().authenticated()
+                .antMatchers("/", "/home", "/ldap-info").hasRole("ALLUSERS")
                 .and()
+                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //.and()
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(authenticationSuccessHandler())
@@ -63,13 +65,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(spnegoAuthenticationProcessingFilter(authenticationManagerBean(),
                         authenticationSuccessHandler()), BasicAuthenticationFilter.class);
+
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .authenticationProvider(kerberosAuthenticationProvider)
-                .authenticationProvider(kerberosServiceAuthenticationProvider);
+                .authenticationProvider(kerberosServiceAuthenticationProvider)
+                .authenticationProvider(new BasicAuthenticationProvider());
     }
 
     @Bean

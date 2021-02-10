@@ -51,7 +51,7 @@ public class UserDetailBindingLdapService implements UserDetailsService {
             String domain = matcher.group(2);
             if (ldapConnectionSettings.getBasePartition().equalsIgnoreCase(domain)) {
                 User user = ldapUserService.searchByPrincipalName(username);
-                if (user != null && nonBlocked(user.getUserAccountControl())) {
+                if (user != null) {
                     return new LdapAppUserDetails(getNameInNamespace(user.getId()), user.getAccountName(), user.getPassword(),
                             user.getFullName(), httpServletRequest.getRemoteAddr(), getAuthorities(user.getMemberOfs(), true));
                 }
@@ -113,26 +113,5 @@ public class UserDetailBindingLdapService implements UserDetailsService {
 
     private String addPrefixToRole(String role) {
         return ROLE_PREFIX.concat(role);
-    }
-
-    private static boolean nonBlocked(String value) {
-        UserAccountControl control = UserAccountControl.UNLOCKED;
-        for (UserAccountControl userAccountControl : UserAccountControl.values()) {
-            if (userAccountControl.value.equals(value)) {
-                control = userAccountControl;
-            }
-        }
-        return UserAccountControl.UNLOCKED.equals(control);
-    }
-
-    private enum UserAccountControl{
-        UNLOCKED("512"),
-        LOCKED("514");
-
-        private String value;
-
-        UserAccountControl(final String value) {
-            this.value = value;
-        }
     }
 }
