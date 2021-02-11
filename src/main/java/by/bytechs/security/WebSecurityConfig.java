@@ -56,8 +56,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/home", "/ldap-info").hasRole("ALLUSERS")
                 .and()
-                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(authenticationSuccessHandler())
